@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
@@ -19,10 +21,36 @@ public class Manager : MonoBehaviour
     public GameObject Chest;//宝箱
     public GameObject JumpGround;//动画播放背景
     public GameObject TopCoin;//HUD中的金币
+    public List<CanvasScaler> canvass=new List<CanvasScaler>();//涉及屏幕适配的所有画布
     private int wallet = 0;//设置钱包
     bool trig = false;//保证金币增加一次
     private static readonly int Buy = Animator.StringToHash("buy");//预存动画机状态，提高效率
 
+    private void Start()
+    {
+        MatchScreen();
+    }
+
+    /// <summary>
+    /// 调整屏幕适配的方案，根据用户屏幕宽高比调整适配方向
+    /// </summary>
+    private void MatchScreen()
+    {
+        if ((float)Screen.width / (float)Screen.height > (float)1080 / (float)1920)
+        {
+            foreach (var t in canvass)
+            {
+                t.matchWidthOrHeight = 1;
+            }
+        }
+        else
+        {
+            foreach (var t in canvass)
+            {
+                t.matchWidthOrHeight = 0;
+            }
+        }
+    }
     /// <summary>
     /// 购买宝箱按键
     /// </summary>
