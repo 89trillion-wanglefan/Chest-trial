@@ -21,36 +21,10 @@ public class Manager : MonoBehaviour
     public GameObject Chest;//宝箱
     public GameObject JumpGround;//动画播放背景
     public GameObject TopCoin;//HUD中的金币
-    public List<CanvasScaler> canvass=new List<CanvasScaler>();//涉及屏幕适配的所有画布
     private int wallet = 0;//设置钱包
     bool trig = false;//保证金币增加一次
     private static readonly int Buy = Animator.StringToHash("buy");//预存动画机状态，提高效率
-
-    private void Start()
-    {
-        MatchScreen();
-    }
-
-    /// <summary>
-    /// 调整屏幕适配的方案，根据用户屏幕宽高比调整适配方向
-    /// </summary>
-    private void MatchScreen()
-    {
-        if ((float)Screen.width / (float)Screen.height > (float)1080 / (float)1920)
-        {
-            foreach (var t in canvass)
-            {
-                t.matchWidthOrHeight = 1;
-            }
-        }
-        else
-        {
-            foreach (var t in canvass)
-            {
-                t.matchWidthOrHeight = 0;
-            }
-        }
-    }
+    
     /// <summary>
     /// 购买宝箱按键
     /// </summary>
@@ -60,7 +34,7 @@ public class Manager : MonoBehaviour
         anim.SetBool(Buy, true);
         
         Effect.SetActive(false);//关闭粒子特效
-        Chest.transform.localPosition = new Vector3(0, 368, 0);//复用资源
+        Chest.transform.localPosition += new Vector3(0, 100, 0);//复用资源
         Chest.transform.localScale = new Vector3(3, 3, 3);
         JumpGround.SetActive(true);//弹窗
         trig = true;
@@ -118,8 +92,8 @@ public class Manager : MonoBehaviour
     public void OpenEnd()
     {
         if (trig != true) return;
-        Chest.transform.localPosition = new Vector3(0, 0, 0);
         Chest.transform.localScale = new Vector3(1, 1, 1);
+        Chest.transform.localPosition -= new Vector3(0, 100, 0);
         JumpGround.SetActive(false);
         trig = false;
     }
