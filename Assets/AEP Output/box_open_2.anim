@@ -1579,7 +1579,7 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 3
-    functionName: CloseEnd
+    functionName: OpenEnd
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

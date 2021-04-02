@@ -3,23 +3,29 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
+/// <summary>
+/// 主要控制类
+/// </summary>
 public class Manager : MonoBehaviour
 {
     public GameObject Button;//获得游戏资源
-    public GameObject Shop;
-    public GameObject coins;
-    public GameObject coin;
-    public Text text;
-    public int gain = 0;
-    public Animator anim;
-    public GameObject Effect;
-    public GameObject Chest;
-    public GameObject Jump;
-    public GameObject TopCoin;
+    public GameObject Shop;//商店显示UI
+    public GameObject coins;//管理金币用的空物体
+    public GameObject coin;//金币的prefab
+    public Text walletText;//金钱显示
+    public int gain = 0;//点击增加金钱数量
+    public Animator anim;//宝箱动画机
+    public GameObject Effect;//宝箱粒子特效
+    public GameObject Chest;//宝箱
+    public GameObject JumpGround;//动画播放背景
+    public GameObject TopCoin;//HUD中的金币
     private int wallet = 0;//设置钱包
-    bool trig = false;//保证跳回一次
-    private static readonly int Buy = Animator.StringToHash("buy");
+    bool trig = false;//保证金币增加一次
+    private static readonly int Buy = Animator.StringToHash("buy");//预存动画机状态，提高效率
 
+    /// <summary>
+    /// 购买宝箱按键
+    /// </summary>
     public void Click1()
     {
         
@@ -28,33 +34,46 @@ public class Manager : MonoBehaviour
         Effect.SetActive(false);//关闭粒子特效
         Chest.transform.localPosition = new Vector3(0, 368, 0);//复用资源
         Chest.transform.localScale = new Vector3(3, 3, 3);
-        Jump.SetActive(true);//弹窗
+        JumpGround.SetActive(true);//弹窗
         trig = true;
         
         
 
     }
     
+    /// <summary>
+    /// 开始界面按键
+    /// </summary>
     public void ToShop()
     {
         Button.SetActive(false);//打开商店
         Shop.SetActive(true);
     }
     
-    public void IncreaseAnim(int startValue, int targetValue)//数字滚动增加
+    /// <summary>
+    /// 数字滚动增加动画
+    /// </summary>
+    /// 起始值
+    /// <param name="startValue"></param>
+    /// 结束值
+    /// <param name="targetValue"></param>
+    public void IncreaseAnim(int startValue, int targetValue)
     {
         var se = DOTween.Sequence();
         se.Append(DOTween.To(delegate (float value)
         {
             var temp = Mathf.FloorToInt(value);
 
-            text.text = temp + "";
+            walletText.text = temp + "";
             
 
         }, startValue, targetValue, 2f));
     }
 
-    public void OpenEnd()
+    /// <summary>
+    /// 宝箱关闭动画播放结束时执行，切换宝箱动画与状态
+    /// </summary>
+    public void CloseEnd()
     {
   
         gain += 5;
@@ -65,15 +84,23 @@ public class Manager : MonoBehaviour
 
     }
 
-    public void CloseEnd()
+    /// <summary>
+    /// 购买时宝箱打开动画播放结束时执行，切换宝箱动画与状态
+    /// </summary>
+    public void OpenEnd()
     {
         if (trig != true) return;
         Chest.transform.localPosition = new Vector3(0, 0, 0);
         Chest.transform.localScale = new Vector3(1, 1, 1);
-        Jump.SetActive(false);
+        JumpGround.SetActive(false);
         trig = false;
     }
 
+    /// <summary>
+    /// 协程实现金币出生动画
+    /// </summary>
+    /// <param name="quantity"></param>
+    /// <returns></returns>
     private IEnumerator CreateCoin(int quantity)
     {
         anim.SetBool(Buy, false);
