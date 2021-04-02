@@ -1546,6 +1546,9 @@ MonoBehaviour:
   Chest: {fileID: 1363225778}
   JumpGround: {fileID: 1571010784}
   TopCoin: {fileID: 429874053}
+  canvass:
+  - {fileID: 1045824909}
+  - {fileID: 467171285}
 --- !u!1 &1191055994
 GameObject:
   m_ObjectHideFlags: 0
